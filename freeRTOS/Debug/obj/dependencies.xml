@@ -5,7 +5,7 @@
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
       </source>
-      <source file="..\..\..\camera.c" lastModified="14b013cbcc3">
+      <source file="..\..\..\camera.c" lastModified="14b2f811f36">
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_exti.h"/>
@@ -17,6 +17,7 @@
          <include file="..\..\..\camera.h"/>
          <include file="..\..\..\adc.h"/>
          <include file="..\..\..\servo.h"/>
+         <include file="..\..\..\Propultion.h"/>
       </source>
       <source file="..\..\Source\timers.c" lastModified="14a2a427ae0">
          <include file="..\..\Source\include\FreeRTOS.h"/>
@@ -61,6 +62,8 @@
       <source file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h" lastModified="14a2a4c0cf2">
          <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
       </source>
+      <source file="..\..\..\Propultion.h" lastModified="14b0782258f">
+      </source>
       <source file="..\..\..\cmsis_lib\source\stm32f4xx_adc.c" lastModified="14ab5c29575">
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_adc.h"/>
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
@@ -76,6 +79,15 @@
          <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
       </source>
       <source file="..\..\..\interruption.h" lastModified="14ae3814b4c">
+      </source>
+      <source file="..\..\..\Propultion.c" lastModified="14b30c95119">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_tim.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_adc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_syscfg.h"/>
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\Propultion.h"/>
       </source>
       <source file="..\..\Source\portable\GCC\ARM_CM4F\port.c" lastModified="14a2a427ae0">
          <include file="..\..\Source\include\FreeRTOS.h"/>
@@ -143,13 +155,33 @@
       </source>
       <source file="..\..\..\cmsis\core_cmInstr.h" lastModified="14a2a410d22">
       </source>
+      <source file="..\..\..\main.c" lastModified="14b30df3549">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_exti.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_tim.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_adc.h"/>
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_syscfg.h"/>
+         <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
+         <include file="..\..\..\cmsis_lib\include\misc.h"/>
+         <include file="..\..\Source\include\FreeRTOS.h"/>
+         <include file="..\..\Source\include\task.h"/>
+         <include file="..\..\Source\include\semphr.h"/>
+         <include file="..\..\Source\include\queue.h"/>
+         <include file="..\..\..\interruption.h"/>
+         <include file="..\..\..\camera.h"/>
+         <include file="..\..\..\adc.h"/>
+         <include file="..\..\..\servo.h"/>
+         <include file="..\..\..\led.h"/>
+         <include file="..\..\..\Propultion.h"/>
+      </source>
       <source file="..\..\Source\include\mpu_wrappers.h" lastModified="14a2a427ad0">
       </source>
       <source file="..\..\..\led.h" lastModified="14af2cb6b3b">
       </source>
       <source file="..\..\Source\include\StackMacros.h" lastModified="14a2a427ad0">
       </source>
-      <source file="..\..\..\led.c" lastModified="14b013da2a5">
+      <source file="..\..\..\led.c" lastModified="14b30bcbc6a">
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_exti.h"/>
@@ -163,7 +195,7 @@
          <include file="..\..\Source\include\semphr.h"/>
          <include file="..\..\Source\include\queue.h"/>
       </source>
-      <source file="..\..\..\servo.h" lastModified="14af2cc182d">
+      <source file="..\..\..\servo.h" lastModified="14b0792b2ec">
       </source>
       <source file="..\..\Source\include\semphr.h" lastModified="14a2a427ad0">
          <include file="..\..\Source\include\queue.h"/>
@@ -175,7 +207,7 @@
          <include file="..\..\Source\include\task.h"/>
          <include file="..\..\Source\include\croutine.h"/>
       </source>
-      <source file="..\..\..\servo.c" lastModified="14ae86d8e0b">
+      <source file="..\..\..\servo.c" lastModified="14b082f6218">
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_exti.h"/>
@@ -231,7 +263,7 @@
       <source file="..\..\..\cmsis_boot\system_stm32f4xx.c" lastModified="14a2a45dcaa">
          <include file="..\..\..\cmsis_boot\stm32f4xx.h"/>
       </source>
-      <source file="..\..\..\camera.h" lastModified="14af2cdb548">
+      <source file="..\..\..\camera.h" lastModified="14b078178f5">
       </source>
       <source file="..\..\..\cmsis_lib\source\stm32f4xx_exti.c" lastModified="14ab5c1df2b">
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_exti.h"/>

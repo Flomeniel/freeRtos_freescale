@@ -5,17 +5,60 @@
 #include <stm32f4xx_adc.h>
 #include <stm32f4xx_syscfg.h>
 #include <stm32f4xx.h>
+#include <math.h>
 
 #include "interruption.h"
 #include "camera.h"
 #include "adc.h"
 #include "servo.h"
+#include "Propultion.h"
+
+#define RAPPORT_CYCLIQUE_MILIEU			150
+#define INDEX_DONNEE_UTILE_DEBUT		20	//30
+#define ORDONNEE_ORIGINE				118.64		//59
+#define COEFF_DIRECTEUR					0.568
+
+void vTraitementLigne(unsigned int *ADCResult)
+{
+//	static float	a									= COEFF_DIRECTEUR;
+//	static float	b									= ORDONNEE_ORIGINE;
+	static unsigned char	ucRapportCycliquePrecedent	= RAPPORT_CYCLIQUE_MILIEU;
+
+	unsigned char			uiIndexLigneNoir			= 0;
+	unsigned char			index						= INDEX_DONNEE_UTILE_DEBUT;
+	unsigned char			sucRapportCyclique			= RAPPORT_CYCLIQUE_MILIEU;
 
 
-#define INDEX_DONNEE_UTILE_DEBUT		30
-#define RAPPORT_CYCLIQUE_MILIEU			90
-#define ORDONNEE_ORIGINE				59
-#define COEFF_DIRECTEUR					0.55
+	do
+	{
+		if(ADCResult[index]<3500)
+		{
+			if( (ADCResult[index]+ADCResult[index+1]+ADCResult[index+2]+ ADCResult[index+3]+ADCResult[index+4]+ADCResult[index+5]+ADCResult[index+6] ) < (ADCResult[index+7]+ADCResult[index+8]+ADCResult[index+9]+ADCResult[index+10]+ADCResult[index+11]+ADCResult[index+12]+ADCResult[index+13] ))
+			{
+				uiIndexLigneNoir=index;
+			}
+		}
+
+		index++;
+	}while(uiIndexLigneNoir==0 && index <= 108);
+
+	sucRapportCyclique=((unsigned char)(uiIndexLigneNoir*COEFF_DIRECTEUR)+ORDONNEE_ORIGINE);		//	130-180
+
+	//Changer_vitesse_moteur(Calcul_Vitesse_Propultion(sucRapportCyclique));				//132----174
+
+	if(sucRapportCyclique < ucRapportCycliquePrecedent-10 || sucRapportCyclique > ucRapportCycliquePrecedent+10)
+	{
+
+	}else
+	{
+		if(sucRapportCyclique > ucRapportCycliquePrecedent+3 || sucRapportCyclique < ucRapportCycliquePrecedent-3)
+		{
+			servo_moteur(sucRapportCyclique);
+			ucRapportCycliquePrecedent=sucRapportCyclique;
+		}
+	}
+
+}
 
 
 void vClockCamera_Timer4_CH1_PB6()
@@ -68,13 +111,13 @@ void vClockCamera_Timer4_CH1_PB6()
 
 }
 
-void vSICameraGpio_PB7()
+void vSICameraGpio_PE0()
 {
   GPIO_InitTypeDef  GPIO_InitStructure;
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);				//CHANGE
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);				//CHANGE
 	// Configure PC6-PC9 pins as AF, Pull-Down
 
-	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_7 ;						//CHANGE
+	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_0 ;						//CHANGE
 	GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
@@ -83,52 +126,6 @@ void vSICameraGpio_PB7()
 /*	InitGpioxTimer(&GPIO_InitStrutureGpioxTimer, &GPIO_InitStructure, ENABLE);*/
 
 
-	GPIO_Init(GPIOB, &GPIO_InitStructure);								//CHANGE
+	GPIO_Init(GPIOE, &GPIO_InitStructure);								//CHANGE
 }
 
-void vTraitementLigne(unsigned int *ADCResult)
-{
-	static float			a							= COEFF_DIRECTEUR;
-	static unsigned char	b							= ORDONNEE_ORIGINE;
-	static unsigned char	ucRapportCycliquePrecedent	= RAPPORT_CYCLIQUE_MILIEU;
-
-	unsigned char			uiIndexLigneNoir			= 0;
-	unsigned char			index						= INDEX_DONNEE_UTILE_DEBUT;
-	unsigned char			sucRapportCyclique			= RAPPORT_CYCLIQUE_MILIEU;
-
-	vfiltrageNumerique(ADCResult);
-	vfiltrageNumerique(ADCResult);
-	vfiltrageNumerique(ADCResult);
-	vfiltrageNumerique(ADCResult);
-	do
-	{
-		if(ADCResult[index]<400)
-		{
-		//	if( (ADCResult[index]+ADCResult[index+1]+ADCResult[index+2]+ ADCResult[index+3]+ADCResult[index+4]+ADCResult[index+5]+ADCResult[index+6] ) < (ADCResult[index+7]+ADCResult[index+8]+ADCResult[index+9]+ADCResult[index+10]+ADCResult[index+11]+ADCResult[index+12]+ADCResult[index+13] ))
-		//	{
-				uiIndexLigneNoir=index;
-		//	}
-		}
-
-		index++;
-	}while(uiIndexLigneNoir==0 && index <= 110);
-
-	sucRapportCyclique=((unsigned char)(uiIndexLigneNoir*a))+b;
-
-	if(sucRapportCyclique < ucRapportCycliquePrecedent-10 || sucRapportCyclique > ucRapportCycliquePrecedent+10)
-	{
-
-	}else
-	{
-		servo_moteur(sucRapportCyclique);			//60-120
-		ucRapportCycliquePrecedent=sucRapportCyclique;
-	}
-	/*if(sucRapportCyclique > ucRapportCycliquePrecedent-10 || sucRapportCyclique < ucRapportCycliquePrecedent+10)
-		{
-		servo_moteur(sucRapportCyclique);			//60-120
-		ucRapportCycliquePrecedent=sucRapportCyclique;
-		}else
-		{
-
-		}*/
-}

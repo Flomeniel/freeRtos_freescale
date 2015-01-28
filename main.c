@@ -18,10 +18,10 @@
 #include "adc.h"
 #include "servo.h"
 #include "led.h"
+#include "Propultion.h"
 
 /********* Define******************/
 #define BATTERY_TASK_PRIO	(tskIDLE_PRIORITY + 1)
-#define SI_TASK_PRIO		(tskIDLE_PRIORITY + 2)
 #define ADC_TASK_PRIO		(tskIDLE_PRIORITY + 2)
 #define SERVO_TASK_PRIO		(tskIDLE_PRIORITY + 3)
 
@@ -29,7 +29,6 @@
 /*************Variable globale*************/
 unsigned char ucCompteur=0;
 unsigned int ADCResult1[128];
-
 
 /*************Semaphore*************/
 xSemaphoreHandle xSemaphoreADC   = NULL;
@@ -73,16 +72,25 @@ int main(void)
 		vLedBattery_GpioPD0134();
 
 		/*************Initialisation Gpio Si Camera ***************/
-		vSICameraGpio_PB7();
+		vSICameraGpio_PE0();
 
 		/*************Initialisation PWM Servo Moteur ***************/
-		vServo_Timer3_CH1_PC6();
+		vServo_Timer11_CH1_PB9();
 
-		DiodeDeTest();
+		/**************Lancement course*************/
+		vStartButton_GpioE3();
 
+		while(GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_3)==0 );
+
+		/*****************Enable des moteur**************/
+		vEnableMoteur_GPIO_PE2();
+
+	//	vmoteur_G_Timer3_CH1_PC6();
+	//	vmoteur_D_Timer3_CH2_PC7();
+
+//	DiodeDeTest();
 		EXTILine6_Config_PB6();
 
-	xTaskCreate( SIcamera,		(signed char*)"SI",			configMINIMAL_STACK_SIZE, 	NULL, SI_TASK_PRIO, 		NULL);
 	xTaskCreate( AoAdc,			(signed char*)"AO", 		configMINIMAL_STACK_SIZE, 	NULL, ADC_TASK_PRIO, 		NULL);
 	xTaskCreate( ServoMoteur,	(signed char*)"SERVO", 		configMINIMAL_STACK_SIZE, 	NULL, SERVO_TASK_PRIO,		NULL);
 	xTaskCreate( BarGraph,		(signed char*)"BATTERY",	configMINIMAL_STACK_SIZE,	NULL, BATTERY_TASK_PRIO,	NULL);
@@ -120,17 +128,21 @@ void EXTI9_5_IRQHandler(void)
 		/*Si le compteur est a 127 on lache le semaphore Si qui declenche la tache SIcamera*/
 		if(ucCompteur == 127)
 		{
-			xSemaphoreGiveFromISR( xSemaphoreSI, xHigherPriorityTaskWoken );
+		//	xSemaphoreGiveFromISR( xSemaphoreSI, xHigherPriorityTaskWoken );
+			GPIO_SetBits(GPIOE, GPIO_Pin_0);
+			xSemaphoreGiveFromISR( xSemaphoreSERVO, xHigherPriorityTaskWoken );
 		}
 
 		/*Si le compteur est a 128 on lache le semaphore NOT Si qui declenche la tache SIcamera*/
 		if(ucCompteur == 128)
 		{
-			xSemaphoreGiveFromISR( xSemaphoreNotSI, xHigherPriorityTaskWoken );
+		//	xSemaphoreGiveFromISR( xSemaphoreNotSI, xHigherPriorityTaskWoken );
+			GPIO_ResetBits(GPIOE, GPIO_Pin_0);
+			ucCompteur=0;
 		}
 
-			ADC_SoftwareStartConv(ADC1);
-			ADCResult1[ucCompteur]= ADC_GetConversionValue(ADC1);
+		ADC_SoftwareStartConv(ADC1);
+		ADCResult1[ucCompteur]= ADC_GetConversionValue(ADC1);
 
 		portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
 		EXTI_ClearITPendingBit(EXTI_Line6);
@@ -143,34 +155,8 @@ void AoAdc(void * pvParameters)
 	{
 		if( xSemaphoreTake( xSemaphoreADC, portMAX_DELAY ) == pdTRUE )
 		{
-
-		}
-	}
-}
-
-/* Cette fonction ne tourne pas tant qu'elle n'a pas reçus les semaphores SI ou NOT SI
- *	Quand elle reçois le semaphore SI:
- *							-On active la GPIO SI pour le Top Camera donc on a notre tableau globale qui
- *							est plein de 128 valeur de AO de la camera
- *							-On lache le semaphore SERVO pour active la tache ServoMoteur qui traitera le
- *							 tableau de valeur
- *	Quand elle reçois le semaphore NOT SI:
- *							-On desactive la GPIO SI et on remet le compteur GLOBALE a zero
- */
-void SIcamera(void * pvParameters)
-{
-	for(;;)
-	{
-		if( xSemaphoreTake( xSemaphoreSI, portMAX_DELAY ) == pdTRUE )
-		{
-				GPIO_SetBits(GPIOB, GPIO_Pin_7);
-				xSemaphoreGive(xSemaphoreSERVO);
-		}
-
-		if( xSemaphoreTake( xSemaphoreNotSI, portMAX_DELAY ) == pdTRUE )
-		{
-				GPIO_ResetBits(GPIOB, GPIO_Pin_7);
-				ucCompteur=0;
+	/*		ADC_SoftwareStartConv(ADC1);
+			ADCResult1[ucCompteur]= ADC_GetConversionValue(ADC1);*/
 		}
 	}
 }
@@ -181,15 +167,23 @@ void SIcamera(void * pvParameters)
 */
 void ServoMoteur(void * pvParameters)
 {
+	unsigned char compteur=0;
+	unsigned int	resultat=0;
+
 	for(;;)
 	{
 		if( xSemaphoreTake( xSemaphoreSERVO, portMAX_DELAY ) == pdTRUE )
 		{
 			vTraitementLigne(&ADCResult1);
+
+			for(compteur=0; compteur<128; compteur++)
+			{
+				resultat=ADCResult1[compteur]+resultat;
+			}
+			resultat=0;
 		}
 	}
 }
-
 
 
 void BarGraph(void * pvParameters)
@@ -201,18 +195,12 @@ void BarGraph(void * pvParameters)
 		while(ADC_GetFlagStatus(ADC2, ADC_FLAG_EOC) == RESET);
 		uiNiveauBattery= ADC_GetConversionValue(ADC2);
 
-
 		if(uiNiveauBattery>1500 && uiNiveauBattery<1600 )
 		{
 			GPIO_SetBits(GPIOD,GPIO_Pin_0);
 			GPIO_SetBits(GPIOD,GPIO_Pin_1);
 			GPIO_SetBits(GPIOD,GPIO_Pin_3);
 			GPIO_SetBits(GPIOD,GPIO_Pin_4);
-
-			GPIO_SetBits(GPIOD, GPIO_Pin_12);
-			GPIO_SetBits(GPIOD, GPIO_Pin_13);
-			GPIO_SetBits(GPIOD, GPIO_Pin_14);
-			GPIO_SetBits(GPIOD, GPIO_Pin_15);
 		}
 
 		if(uiNiveauBattery>1400 && uiNiveauBattery<1500 )
@@ -221,11 +209,6 @@ void BarGraph(void * pvParameters)
 			GPIO_SetBits(GPIOD,GPIO_Pin_1);
 			GPIO_SetBits(GPIOD,GPIO_Pin_3);
 			GPIO_ResetBits(GPIOD,GPIO_Pin_4);
-
-			GPIO_SetBits(GPIOD, GPIO_Pin_12);
-			GPIO_SetBits(GPIOD, GPIO_Pin_13);
-			GPIO_SetBits(GPIOD, GPIO_Pin_14);
-			GPIO_ResetBits(GPIOD, GPIO_Pin_15);
 		}
 		if(uiNiveauBattery>1300 && uiNiveauBattery<1400 )
 		{
@@ -233,11 +216,6 @@ void BarGraph(void * pvParameters)
 			GPIO_SetBits(GPIOD,GPIO_Pin_1);
 			GPIO_ResetBits(GPIOD,GPIO_Pin_3);
 			GPIO_ResetBits(GPIOD,GPIO_Pin_4);
-
-			GPIO_SetBits(GPIOD, GPIO_Pin_12);
-			GPIO_SetBits(GPIOD, GPIO_Pin_13);
-			GPIO_ResetBits(GPIOD, GPIO_Pin_14);
-			GPIO_ResetBits(GPIOD, GPIO_Pin_15);
 		}
 		if(uiNiveauBattery >1200 && uiNiveauBattery<1300 )
 		{
@@ -245,11 +223,6 @@ void BarGraph(void * pvParameters)
 			GPIO_ResetBits(GPIOD,GPIO_Pin_1);
 			GPIO_ResetBits(GPIOD,GPIO_Pin_3);
 			GPIO_ResetBits(GPIOD,GPIO_Pin_4);
-
-			GPIO_SetBits(GPIOD, GPIO_Pin_12);
-			GPIO_ResetBits(GPIOD, GPIO_Pin_13);
-			GPIO_ResetBits(GPIOD, GPIO_Pin_14);
-			GPIO_ResetBits(GPIOD, GPIO_Pin_15);
 		}
 	}
 }

@@ -7,7 +7,7 @@
         <Option name="OptimizationLevel" value="0"/>
         <Option name="UseFPU" value="0"/>
         <Option name="UserEditCompiler" value=""/>
-        <Option name="FPU" value="2"/>
+        <Option name="FPU" value="1"/>
         <Includepaths>
           <Includepath path="."/>
         </Includepaths>
@@ -50,7 +50,7 @@
     </BuildOption>
     <DebugOption>
       <Option name="org.coocox.codebugger.gdbjtag.core.adapter" value="ST-Link"/>
-      <Option name="org.coocox.codebugger.gdbjtag.core.debugMode" value="SWD"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.debugMode" value="JTAG"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.clockDiv" value="1M"/>
       <Option name="org.coocox.codebugger.gdbjtag.corerunToMain" value="1"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.jlinkgdbserver" value=""/>
@@ -133,8 +133,9 @@
     <File name="cmsis_lib/source/stm32f4xx_exti.c" path="cmsis_lib/source/stm32f4xx_exti.c" type="1"/>
     <File name="FreeRTOS/Source/include/list.h" path="freeRTOS/Source/include/list.h" type="1"/>
     <File name="cmsis_boot/system_stm32f4xx.c" path="cmsis_boot/system_stm32f4xx.c" type="1"/>
-    <File name="cmsis" path="" type="2"/>
+    <File name="Propultion.c" path="Propultion.c" type="1"/>
     <File name="interruption.c" path="interruption.c" type="1"/>
+    <File name="cmsis" path="" type="2"/>
     <File name="cmsis_lib" path="" type="2"/>
     <File name="cmsis_lib/source/stm32f4xx_tim.c" path="cmsis_lib/source/stm32f4xx_tim.c" type="1"/>
     <File name="adc.c" path="adc.c" type="1"/>
@@ -146,6 +147,7 @@
     <File name="FreeRTOS/Source/include/StackMacros.h" path="freeRTOS/Source/include/StackMacros.h" type="1"/>
     <File name="FreeRTOS/Source/include/FreeRTOSConfig.h" path="freeRTOS/Source/include/FreeRTOSConfig.h" type="1"/>
     <File name="cmsis_lib/include/misc.h" path="cmsis_lib/include/misc.h" type="1"/>
+    <File name="Propultion.h" path="Propultion.h" type="1"/>
     <File name="cmsis_lib/include" path="" type="2"/>
     <File name="FreeRTOS/Source/include/ustime.h" path="freeRTOS/Source/include/ustime.h" type="1"/>
     <File name="FreeRTOS" path="" type="2"/>
