@@ -13,6 +13,7 @@
 #include "servo.h"
 #include "led.h"
 #include "Accelerometre.h"
+#include "Additional_Features.h"
 
 /********* Define******************/
 #define BATTERY_TASK_PRIO	(tskIDLE_PRIORITY + 1)

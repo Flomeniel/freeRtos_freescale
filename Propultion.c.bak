@@ -35,13 +35,13 @@ unsigned char Calcul_Vitesse_Propultion(unsigned char rapport_cyclique_servo)
 	 * @note
 	 * version de test
 	 */
-	if( ( (rapport_cyclique_servo > 120) && (rapport_cyclique_servo < 145) ) || ((rapport_cyclique_servo > 155) && (rapport_cyclique_servo < 185)))
+	if(((rapport_cyclique_servo > 84) && (rapport_cyclique_servo < 101)) || (rapport_cyclique_servo > 111) && (rapport_cyclique_servo < 128))
 	{
-		speed = 10;
+		speed = 50;
 	}
 	else
 	{
-		speed = 30;
+		speed = 120;
 	}
 	return speed;
 }
@@ -162,9 +162,9 @@ void vmoteur_G_Timer3_CH1_PC6()
 	/*	InitTimer(TIM3, 100, 100, 0);*/
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
-	TIM_TimeBaseStructure.TIM_Prescaler =91;// psc
+	TIM_TimeBaseStructure.TIM_Prescaler =1285;// psc
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Period = 90;// arr
+	TIM_TimeBaseStructure.TIM_Period = 1281;// arr
 	TIM_TimeBaseStructure.TIM_ClockDivision =0;
 	TIM_TimeBaseStructure.TIM_RepetitionCounter=0;// rcc
 
@@ -176,7 +176,7 @@ void vmoteur_G_Timer3_CH1_PC6()
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OCInitStructure.TIM_Pulse = 35;
+	TIM_OCInitStructure.TIM_Pulse = 0;
 
 	//changer le numéro de TIM_OCxInite pour le chanel que tu veux
 	TIM_OC1Init(TIM3, &TIM_OCInitStructure);							//CHANGE
@@ -205,7 +205,7 @@ void vmoteur_D_Timer3_CH2_PC7()
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);				//CHANGE
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 
-	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_7;						//CHANGE
+	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_6;						//CHANGE
 	GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
@@ -214,15 +214,15 @@ void vmoteur_D_Timer3_CH2_PC7()
 
 	GPIO_Init(GPIOC, &GPIO_InitStructure);								//CHANGE
 
-	GPIO_PinAFConfig(GPIOC, GPIO_PinSource7, GPIO_AF_TIM3);				//CHANGE
+	GPIO_PinAFConfig(GPIOC, GPIO_PinSource6, GPIO_AF_TIM3);				//CHANGE
 
 
 	/*	InitTimer(TIM3, 100, 100, 0);*/
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
-	TIM_TimeBaseStructure.TIM_Prescaler =91;// psc
+	TIM_TimeBaseStructure.TIM_Prescaler =1285;// psc
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Period = 92;// arr
+	TIM_TimeBaseStructure.TIM_Period = 1281;// arr
 	TIM_TimeBaseStructure.TIM_ClockDivision =0;
 	TIM_TimeBaseStructure.TIM_RepetitionCounter=0;// rcc
 
@@ -234,7 +234,7 @@ void vmoteur_D_Timer3_CH2_PC7()
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OCInitStructure.TIM_Pulse = 35;
+	TIM_OCInitStructure.TIM_Pulse = 0;
 
 	//changer le numéro de TIM_OCxInite pour le chanel que tu veux
 	TIM_OC2Init(TIM3, &TIM_OCInitStructure);							//CHANGE
@@ -244,33 +244,4 @@ void vmoteur_D_Timer3_CH2_PC7()
 
 
 	TIM_Cmd(TIM3, ENABLE);
-}
-
-/**
- * 	@fn void propultion_Droit(unsigned char delta)
- * 	@brief Fonction de modification vitesse du moteur droit.
- *
- * 	@param delta : variable vitesse qui fixe la valeur du rapport cyclyque.
- *
- *	@note
- * 	Cette fonction permet de modifier la vitesse du moteur droit independament
- * 	du moteur gauche.
- */
-void vEnableMoteur_GPIO_PE2(unsigned char delta)
-{
-	  GPIO_InitTypeDef  GPIO_InitStructure;
-	  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);				//CHANGE
-		// Configure PC6-PC9 pins as AF, Pull-Down
-
-		GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_2 ;						//CHANGE
-		GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_OUT;
-		GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-		GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
-		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-
-	/*	InitGpioxTimer(&GPIO_InitStrutureGpioxTimer, &GPIO_InitStructure, ENABLE);*/
-
-
-		GPIO_Init(GPIOE, &GPIO_InitStructure);								//CHANGE
-		GPIO_SetBits(GPIOE, GPIO_Pin_2);
 }
