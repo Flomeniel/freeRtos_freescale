@@ -1,22 +1,4 @@
-#include <stm32f4xx_gpio.h>
-#include <stm32f4xx_rcc.h>
-#include <stm32f4xx_exti.h>
-#include <stm32f4xx_tim.h>
-#include <stm32f4xx_adc.h>
-#include <stm32f4xx_syscfg.h>
-#include <stm32f4xx.h>
-
-#include "interruption.h"
 #include "camera.h"
-#include "adc.h"
-#include "servo.h"
-
-
-#define INDEX_DONNEE_UTILE_DEBUT		30
-#define RAPPORT_CYCLIQUE_MILIEU			90
-#define ORDONNEE_ORIGINE				59
-#define COEFF_DIRECTEUR					0.55
-
 
 void vClockCamera_Timer4_CH1_PB6()
 {
@@ -94,7 +76,7 @@ void vTraitementLigne(unsigned int *ADCResult)
 
 	unsigned char			uiIndexLigneNoir			= 0;
 	unsigned char			index						= INDEX_DONNEE_UTILE_DEBUT;
-	unsigned char			sucRapportCyclique			= RAPPORT_CYCLIQUE_MILIEU;
+	unsigned char	sucRapportCyclique					=RAPPORT_CYCLIQUE_MILIEU;
 
 	vfiltrageNumerique(ADCResult);
 	vfiltrageNumerique(ADCResult);
@@ -120,7 +102,7 @@ void vTraitementLigne(unsigned int *ADCResult)
 
 	}else
 	{
-		servo_moteur(sucRapportCyclique);			//60-120
+		servo_moteur(sucRapportCyclique);			//84-128
 		ucRapportCycliquePrecedent=sucRapportCyclique;
 	}
 	/*if(sucRapportCyclique > ucRapportCycliquePrecedent-10 || sucRapportCyclique < ucRapportCycliquePrecedent+10)

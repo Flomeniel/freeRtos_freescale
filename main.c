@@ -1,12 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
-#include <stm32f4xx_gpio.h>
-#include <stm32f4xx_rcc.h>
-#include <stm32f4xx_exti.h>
-#include <stm32f4xx_tim.h>
-#include <stm32f4xx_adc.h>
-#include <stm32f4xx_syscfg.h>
+#include <stm32f4xx_conf.h>
 #include <stm32f4xx.h>
-#include <misc.h>
 
 #include <FreeRTOS.h>
 #include <task.h>
@@ -18,18 +12,22 @@
 #include "adc.h"
 #include "servo.h"
 #include "led.h"
+#include "Accelerometre.h"
 
 /********* Define******************/
 #define BATTERY_TASK_PRIO	(tskIDLE_PRIORITY + 1)
 #define SI_TASK_PRIO		(tskIDLE_PRIORITY + 2)
 #define ADC_TASK_PRIO		(tskIDLE_PRIORITY + 2)
+#define ACC_TASK_PRIO		(tskIDLE_PRIORITY + 2)
 #define SERVO_TASK_PRIO		(tskIDLE_PRIORITY + 3)
-#define	PROP_TASK_PRIO		(tskIDLE_PRIORITY +3)
+#define	PROP_TASK_PRIO		(tskIDLE_PRIORITY +	3)
 
 /*************Variable globale*************/
 unsigned char ucCompteur=0;
+unsigned char localcounteracc = 0;
+int SPIResult[LoadDataLenght];
 unsigned int ADCResult1[128];
-
+extern unsigned char sucRapportCyclique;
 
 /*************Semaphore*************/
 xSemaphoreHandle xSemaphoreADC   = NULL;
@@ -37,6 +35,7 @@ xSemaphoreHandle xSemaphoreSI    = NULL;
 xSemaphoreHandle xSemaphoreNotSI = NULL;
 xSemaphoreHandle xSemaphoreSERVO = NULL;
 xSemaphoreHandle xSemaphorePROPULTION = NULL;
+xSemaphoreHandle xSemaphoreACCELEROMETRE = NULL;
 
 static signed portBASE_TYPE xHigherPriorityTaskWoken;
 
@@ -54,6 +53,7 @@ int main(void)
 	vSemaphoreCreateBinary( xSemaphoreNotSI );
 	vSemaphoreCreateBinary( xSemaphoreSERVO );
 	vSemaphoreCreateBinary( xSemaphorePROPULTION);
+	vSemaphoreCreateBinary( xSemaphoreACCELEROMETRE);
 
 	SystemInit();
 	SystemCoreClockUpdate();
@@ -84,6 +84,12 @@ int main(void)
 		vmoteur_G_Timer3_CH1_PC6();
 		vmoteur_D_Timer3_CH2_PC7();
 
+		/*************Initialisation SPI Accelerometre ***************/
+		vAccelerometre_GPIO_SPI2_PC3_PC2();
+		vAccelerometre_SPI();
+		//vAccelerometre_IT_enable();
+		vAccelerometre_DMA();
+
 		DiodeDeTest();
 
 		EXTILine6_Config_PB6();
@@ -99,7 +105,20 @@ int main(void)
 	{
 	}
 }
-/* Cette interruption se déclanche tous les fronts montants du PWM de la camera
+/**
+ *	/note
+ *	Cette interuption ce declanche quand la rception est complete
+ */
+void SPI2_IRQHandler(void)
+{
+	localcounteracc++;
+	SPIResult[localcounteracc]=	SPI_DR_DR;
+	xSemaphoreGiveFromISR( xSemaphoreADC, xHigherPriorityTaskWoken );
+}
+
+/**
+ * @note
+ *  Cette interruption se déclanche tous les fronts montants du PWM de la camera
  * A chaque front :
  * 					- On incrémente un compteur GLOBALE
  * 					- On lache un semaphore ADC pour déclencher une tache AoAdc qui effectue une conversion (NE MARCHE PAS!!!!!!)
@@ -115,7 +134,7 @@ void EXTI9_5_IRQHandler(void)
 
 	if(EXTI_GetITStatus(EXTI_Line6) != RESET)
 	{
-		/*Compteur GLOBALE*/
+		/*Compteur GLOBAL*/
 		ucCompteur++;
 
 		xHigherPriorityTaskWoken = pdFALSE;
@@ -143,6 +162,18 @@ void EXTI9_5_IRQHandler(void)
 	}
 }
 
+void LoadAccValue(void * pvParameters)
+{
+	for(;;)
+	{
+		if( xSemaphoreTake( xSemaphoreACCELEROMETRE, portMAX_DELAY ) == pdTRUE )
+		{
+			vAccDataProcess();
+		}
+	}
+
+}
+
 void AoAdc(void * pvParameters)
 {
 	for(;;)
@@ -154,7 +185,9 @@ void AoAdc(void * pvParameters)
 	}
 }
 
-/* Cette fonction ne tourne pas tant qu'elle n'a pas reçus les semaphores SI ou NOT SI
+/**
+ * @note
+ *  Cette fonction ne tourne pas tant qu'elle n'a pas reçus les semaphores SI ou NOT SI
  *	Quand elle reçois le semaphore SI:
  *							-On active la GPIO SI pour le Top Camera donc on a notre tableau globale qui
  *							est plein de 128 valeur de AO de la camera
@@ -181,7 +214,9 @@ void SIcamera(void * pvParameters)
 	}
 }
 
-/* Cette fonction ne tourne pas tant qu'elle n'a pas reçus le semaphores SERVO
+/**
+ * @note
+ *  Cette fonction ne tourne pas tant qu'elle n'a pas reçus le semaphores SERVO
  *
  *
 */
@@ -202,7 +237,7 @@ void Propultion(void * pvParameters)
 	{
 		if( xSemaphoreAltTake( xSemaphorePROPULTION, portMAX_DELAY) == pdTRUE)
 		{
-			Changer_vitesse_moteur(speed);
+			Changer_vitesse_moteur(Calcul_Vitesse_Propultion(sucRapportCyclique));
 		}
 	}
 }

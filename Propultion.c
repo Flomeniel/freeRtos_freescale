@@ -11,13 +11,6 @@
  *
  */
 
-#include <stm32f4xx_gpio.h>
-#include <stm32f4xx_rcc.h>
-#include <stm32f4xx_tim.h>
-#include <stm32f4xx_adc.h>
-#include <stm32f4xx_syscfg.h>
-#include <stm32f4xx.h>
-
 #include "Propultion.h"
 
 /**
@@ -31,12 +24,25 @@
  * 	un systeme entièrement linéaire
  *
  */
-unsigned char Calcul_Vitesse_Propultion()
+unsigned char Calcul_Vitesse_Propultion(unsigned char rapport_cyclique_servo)
 {
 	unsigned char speed;
 	/**
 	 * @brief Calcul à déterminer
 	 */
+
+	/**
+	 * @note
+	 * version de test
+	 */
+	if(((rapport_cyclique_servo > 84) && (rapport_cyclique_servo < 101)) || (rapport_cyclique_servo > 111) && (rapport_cyclique_servo < 128))
+	{
+		speed = 50;
+	}
+	else
+	{
+		speed = 120;
+	}
 	return speed;
 }
 
@@ -57,25 +63,25 @@ void Changer_vitesse_moteur(unsigned char delta)
 	 *  	   l'ajout d'un offset de corection si un moteur à un décalage.
 	 */
 
-	TIM_OCInitTypeDef       TIM_OCInitStructure;
+	TIM_OCInitTypeDef       TIM_OC1InitStructure;
 
-	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
-	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OCInitStructure.TIM_Pulse = delta;								//100 correspond
-
-	//changer le numéro de TIM_OCxInite pour le chanel que tu veux
-	TIM_OC1Init(TIM3, &TIM_OCInitStructure);
-
-	TIM_OCInitTypeDef       TIM_OCInitStructure;
-
-	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
-	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OCInitStructure.TIM_Pulse = delta;								//100 correspond
+	TIM_OC1InitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+	TIM_OC1InitStructure.TIM_OutputState = TIM_OutputState_Enable;
+	TIM_OC1InitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+	TIM_OC1InitStructure.TIM_Pulse = delta;								//100 correspond
 
 	//changer le numéro de TIM_OCxInite pour le chanel que tu veux
-	TIM_OC2Init(TIM3, &TIM_OCInitStructure);
+	TIM_OC1Init(TIM3, &TIM_OC1InitStructure);
+
+	TIM_OCInitTypeDef       TIM_OC2InitStructure;
+
+	TIM_OC2InitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+	TIM_OC2InitStructure.TIM_OutputState = TIM_OutputState_Enable;
+	TIM_OC2InitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+	TIM_OC2InitStructure.TIM_Pulse = delta;								//100 correspond
+
+	//changer le numéro de TIM_OCxInite pour le chanel que tu veux
+	TIM_OC2Init(TIM3, &TIM_OC2InitStructure);
 }
 
 /**
