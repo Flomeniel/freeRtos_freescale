@@ -11,31 +11,7 @@
  *
  */
 
-#include <stm32f4xx_gpio.h>
-#include <stm32f4xx_rcc.h>
-#include <stm32f4xx_tim.h>
-#include <stm32f4xx_adc.h>
-#include <stm32f4xx_syscfg.h>
-#include <stm32f4xx.h>
-
 #include "Propultion.h"
-
-
-void vStartButton_GpioE3()
-{
-	  GPIO_InitTypeDef  GPIO_InitStructure;
-	  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);				//CHANGE
-		// Configure PC6-PC9 pins as AF, Pull-Down
-
-		GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_3 ;						//CHANGE
-		GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IN;
-		GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-		GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
-		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-
-	/*	InitGpioxTimer(&GPIO_InitStrutureGpioxTimer, &GPIO_InitStructure, ENABLE);*/
-		GPIO_Init(GPIOE, &GPIO_InitStructure);								//CHANGE
-}
 
 
 /**
@@ -175,7 +151,7 @@ void vmoteur_G_Timer3_CH1_PC6()
 	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_6;						//CHANGE
 	GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
+	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_DOWN;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 
 
@@ -201,7 +177,7 @@ void vmoteur_G_Timer3_CH1_PC6()
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OCInitStructure.TIM_Pulse = 35;
+	TIM_OCInitStructure.TIM_Pulse = REGLAGE_VITESSE_PROPULTION;
 
 	//changer le numéro de TIM_OCxInite pour le chanel que tu veux
 	TIM_OC1Init(TIM3, &TIM_OCInitStructure);							//CHANGE
@@ -233,7 +209,7 @@ void vmoteur_D_Timer3_CH2_PC7()
 	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_7;						//CHANGE
 	GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
+	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_DOWN;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 
 
@@ -259,7 +235,7 @@ void vmoteur_D_Timer3_CH2_PC7()
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OCInitStructure.TIM_Pulse = 35;
+	TIM_OCInitStructure.TIM_Pulse = REGLAGE_VITESSE_PROPULTION;
 
 	//changer le numéro de TIM_OCxInite pour le chanel que tu veux
 	TIM_OC2Init(TIM3, &TIM_OCInitStructure);							//CHANGE
@@ -281,7 +257,7 @@ void vmoteur_D_Timer3_CH2_PC7()
  * 	Cette fonction permet de modifier la vitesse du moteur droit independament
  * 	du moteur gauche.
  */
-void vEnableMoteur_GPIO_PE2(unsigned char delta)
+void vEnableMoteur_GPIO_PE2(void)
 {
 	  GPIO_InitTypeDef  GPIO_InitStructure;
 	  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);				//CHANGE

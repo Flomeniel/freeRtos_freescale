@@ -1,30 +1,36 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <history>
-   <processor signature="arm-none-eabi-gcc -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -mthumb -Wall -g -nostartfiles -Map=freeRTOS.map -O0 --gc-sections -LC:\CooCox\CoIDE\configuration\ProgramData\freeRTOS_freescale -TC:\CooCox\CoIDE\configuration\ProgramData\freeRTOS_freescale/arm-gcc-link.ld -g">
-      <target file="freeRTOS.elf" lastModified="14b30df3ff7">
-         <source file="..\obj\stm32f4xx_syscfg.o" lastModified="14b2a849d39"/>
-         <source file="..\obj\camera.o" lastModified="14b2f812ddc"/>
-         <source file="..\obj\led.o" lastModified="14b30bcc350"/>
-         <source file="..\obj\startup_stm32f4xx.o" lastModified="14b2a84a008"/>
-         <source file="..\obj\Propultion.o" lastModified="14b30c95eb6"/>
-         <source file="..\obj\main.o" lastModified="14b30df3c9c"/>
-         <source file="..\obj\stm32f4xx_rcc.o" lastModified="14b2a84a45d"/>
-         <source file="..\obj\interruption.o" lastModified="14b2a84a547"/>
-         <source file="..\obj\timers.o" lastModified="14b2a84a641"/>
-         <source file="..\obj\stm32f4xx_adc.o" lastModified="14b2a84a7c8"/>
-         <source file="..\obj\tasks.o" lastModified="14b2a84aa0a"/>
-         <source file="..\obj\servo.o" lastModified="14b2a84aaf5"/>
-         <source file="..\obj\stm32f4xx_gpio.o" lastModified="14b2a84ac0e"/>
-         <source file="..\obj\list.o" lastModified="14b2a84ad08"/>
-         <source file="..\obj\system_stm32f4xx.o" lastModified="14b2a84adf2"/>
-         <source file="..\obj\syscalls.o" lastModified="14b2a84aebd"/>
-         <source file="..\obj\adc.o" lastModified="14b2a84afc7"/>
-         <source file="..\obj\port.o" lastModified="14b2a84b0c1"/>
-         <source file="..\obj\queue.o" lastModified="14b2a84b228"/>
-         <source file="..\obj\croutine.o" lastModified="14b2a84b342"/>
-         <source file="..\obj\stm32f4xx_exti.o" lastModified="14b2a84b42c"/>
-         <source file="..\obj\misc.o" lastModified="14b2a84b507"/>
-         <source file="..\obj\stm32f4xx_tim.o" lastModified="14b2a84b739"/>
+   <processor signature="4.7.4 -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wall -g -nostartfiles -Map=freeRTOS.map -O0 --gc-sections -LC:\Users\clement\AppData\Roaming\CooCox\CoIDE\configuration\ProgramData\freeRTOS_freescale -TC:\Users\clement\AppData\Roaming\CooCox\CoIDE\configuration\ProgramData\freeRTOS_freescale/arm-gcc-link.ld -g">
+      <target file="freeRTOS.elf" lastModified="14b61b0beff">
+         <source file="..\obj\stm32f4xx_syscfg.o" lastModified="14b61ae45f9"/>
+         <source file="..\obj\camera.o" lastModified="14b61ae4683"/>
+         <source file="..\obj\led.o" lastModified="14b61ae46f9"/>
+         <source file="..\obj\startup_stm32f4xx.o" lastModified="14b61ae473d"/>
+         <source file="..\obj\Propultion.o" lastModified="14b61ae486d"/>
+         <source file="..\obj\main.o" lastModified="14b61b01df4"/>
+         <source file="..\obj\Additional_Features.o" lastModified="14b61b0b935"/>
+         <source file="..\obj\stm32f4xx_rcc.o" lastModified="14b61ae4aec"/>
+         <source file="..\obj\interruption.o" lastModified="14b61ae4c20"/>
+         <source file="..\obj\timers.o" lastModified="14b61ae4c93"/>
+         <source file="..\obj\stm32f4xx_adc.o" lastModified="14b61ae4d2a"/>
+         <source file="..\obj\tasks.o" lastModified="14b61ae4e0e"/>
+         <source file="..\obj\servo.o" lastModified="14b61ae4e8b"/>
+         <source file="..\obj\stm32f4xx_gpio.o" lastModified="14b61ae4f09"/>
+         <source file="..\obj\list.o" lastModified="14b61ae4f8f"/>
+         <source file="..\obj\system_stm32f4xx.o" lastModified="14b61ae5002"/>
+         <source file="..\obj\syscalls.o" lastModified="14b61ae5068"/>
+         <source file="..\obj\stm32f4xx_dma.o" lastModified="14b61ae50ed"/>
+         <source file="..\obj\adc.o" lastModified="14b61ae516c"/>
+         <source file="..\obj\PID.o" lastModified="14b61ae51e2"/>
+         <source file="..\obj\port.o" lastModified="14b61ae525c"/>
+         <source file="..\obj\queue.o" lastModified="14b61ae5302"/>
+         <source file="..\obj\croutine.o" lastModified="14b61ae5385"/>
+         <source file="..\obj\stm32f4xx_spi.o" lastModified="14b61ae5411"/>
+         <source file="..\obj\stm32f4xx_exti.o" lastModified="14b61ae5485"/>
+         <source file="..\obj\misc.o" lastModified="14b61ae54f6"/>
+         <source file="..\obj\Accelerometre.o" lastModified="14b61b0bb1b"/>
+         <source file="..\obj\stm32f4_discovery_lis302dl.o" lastModified="14b61ae5635"/>
+         <source file="..\obj\stm32f4xx_tim.o" lastModified="14b61ae570f"/>
       </target>
    </processor>
 </history>

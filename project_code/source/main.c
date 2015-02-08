@@ -1,17 +1,17 @@
 /* Includes ------------------------------------------------------------------*/
-#include <stm32f4xx_gpio.h>
-#include <stm32f4xx_rcc.h>
-#include <stm32f4xx_exti.h>
-#include <stm32f4xx_tim.h>
-#include <stm32f4xx_adc.h>
-#include <stm32f4xx_syscfg.h>
+#include <stm32f4xx_conf.h>
 #include <stm32f4xx.h>
-#include <misc.h>
 
 #include <FreeRTOS.h>
 #include <task.h>
 #include <semphr.h>
 #include <queue.h>
+
+/**
+ * @brief Fchier contenant tout les define du projet
+ */
+#include "Project_conf.h"
+
 
 #include "interruption.h"
 #include "camera.h"
@@ -19,22 +19,23 @@
 #include "servo.h"
 #include "led.h"
 #include "Propultion.h"
-
-/********* Define******************/
-#define BATTERY_TASK_PRIO	(tskIDLE_PRIORITY + 1)
-#define ADC_TASK_PRIO		(tskIDLE_PRIORITY + 2)
-#define SERVO_TASK_PRIO		(tskIDLE_PRIORITY + 3)
-
+#include "Accelerometre.h"
+#include "PID.h"
+#include "Additional_Features.h"
 
 /*************Variable globale*************/
-unsigned char ucCompteur=0;
-unsigned int ADCResult1[128];
+unsigned char	ucCompteur=0;
+unsigned int	ADCResult1[128];
+unsigned char	cConmand = ADXL345_DATAX0_REG;
+char			X_Value0 = 0;
+char			Y_Value0 = 0;
+char 			X_Value1 = 0;
+char			Y_Value1 = 0;
 
 /*************Semaphore*************/
-xSemaphoreHandle xSemaphoreADC   = NULL;
-xSemaphoreHandle xSemaphoreSI    = NULL;
-xSemaphoreHandle xSemaphoreNotSI = NULL;
+
 xSemaphoreHandle xSemaphoreSERVO = NULL;
+xSemaphoreHandle xSemaphoreACC	 = NULL;
 
 static signed portBASE_TYPE xHigherPriorityTaskWoken;
 
@@ -47,13 +48,12 @@ void vApplicationIdleHook(void){
 
 int main(void)
 {
-	vSemaphoreCreateBinary( xSemaphoreADC );
-	vSemaphoreCreateBinary( xSemaphoreSI );
-	vSemaphoreCreateBinary( xSemaphoreNotSI );
 	vSemaphoreCreateBinary( xSemaphoreSERVO );
+	vSemaphoreCreateBinary( xSemaphoreACC);
 
 	SystemInit();
 	SystemCoreClockUpdate();
+
 
 		/*************Initialisation de l'ADC camera ***************/
 		GPIO_Config_Camera_Adc1_PA1();
@@ -80,20 +80,25 @@ int main(void)
 		/**************Lancement course*************/
 		vStartButton_GpioE3();
 
+					//127----150----187
 		while(GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_3)==0 );
 
 		/*****************Enable des moteur**************/
 		vEnableMoteur_GPIO_PE2();
 
-	//	vmoteur_G_Timer3_CH1_PC6();
-	//	vmoteur_D_Timer3_CH2_PC7();
+		vmoteur_G_Timer3_CH1_PC6();
+		vmoteur_D_Timer3_CH2_PC7();
+		/*****************Accelerometre*****************/
+		//vAccelerometre_Init_ALL();
+		/*****************PID*****************/
+		init_PID();
 
 //	DiodeDeTest();
 		EXTILine6_Config_PB6();
 
-	xTaskCreate( AoAdc,			(signed char*)"AO", 		configMINIMAL_STACK_SIZE, 	NULL, ADC_TASK_PRIO, 		NULL);
-	xTaskCreate( ServoMoteur,	(signed char*)"SERVO", 		configMINIMAL_STACK_SIZE, 	NULL, SERVO_TASK_PRIO,		NULL);
-	xTaskCreate( BarGraph,		(signed char*)"BATTERY",	configMINIMAL_STACK_SIZE,	NULL, BATTERY_TASK_PRIO,	NULL);
+	xTaskCreate( ServoMoteur,	(signed char*)"SERVO", 		configMINIMAL_STACK_SIZE, 	NULL, PRIORITE_NIVEAU_3,	NULL);
+	xTaskCreate( BarGraph,		(signed char*)"BATTERY",	configMINIMAL_STACK_SIZE,	NULL, PRIORITE_NIVEAU_1,	NULL);
+	xTaskCreate( Accelerometre,	(signed char*)"ACCELERO",	configMINIMAL_STACK_SIZE,   NULL, PRIORITE_NIVEAU_2,	NULL);
 
 	vTaskStartScheduler();
 
@@ -123,7 +128,7 @@ void EXTI9_5_IRQHandler(void)
 		xHigherPriorityTaskWoken = pdFALSE;
 
 		/*Semapore de la fonction Conversion ADC de la camera NE MARCHE PAS!!! MAIS ON FAIT COMME SI.....*/
-		xSemaphoreGiveFromISR( xSemaphoreADC, xHigherPriorityTaskWoken );
+		//xSemaphoreGiveFromISR( xSemaphoreADC, xHigherPriorityTaskWoken );
 
 		/*Si le compteur est a 127 on lache le semaphore Si qui declenche la tache SIcamera*/
 		if(ucCompteur == 127)
@@ -147,16 +152,25 @@ void EXTI9_5_IRQHandler(void)
 		portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
 		EXTI_ClearITPendingBit(EXTI_Line6);
 	}
+	else if(EXTI_GetITStatus(EXTI_Line8) != RESET)
+	{
+		xHigherPriorityTaskWoken = pdFALSE;
+		xSemaphoreGiveFromISR( xSemaphoreACC, xHigherPriorityTaskWoken );
+		portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
+		EXTI_ClearITPendingBit(EXTI_Line8);
+	}
 }
 
-void AoAdc(void * pvParameters)
+void Accelerometre(void * pvParameters)
 {
 	for(;;)
 	{
-		if( xSemaphoreTake( xSemaphoreADC, portMAX_DELAY ) == pdTRUE )
+		if ( xSemaphoreTake( xSemaphoreACC, portMAX_DELAY) == pdTRUE)
 		{
-	/*		ADC_SoftwareStartConv(ADC1);
-			ADCResult1[ucCompteur]= ADC_GetConversionValue(ADC1);*/
+			X_Value0 = vAccDataSend(ADXL345_DATAX0_REG);
+			Y_Value0 = vAccDataSend(ADXL345_DATAY0_REG);
+			X_Value1 = vAccDataSend(ADXL345_DATAX1_REG);
+			Y_Value1 = vAccDataSend(ADXL345_DATAY1_REG);
 		}
 	}
 }
@@ -167,8 +181,8 @@ void AoAdc(void * pvParameters)
 */
 void ServoMoteur(void * pvParameters)
 {
-	unsigned char compteur=0;
-	unsigned int	resultat=0;
+	//unsigned char compteur=0;
+	//unsigned int	resultat=0;
 
 	for(;;)
 	{
@@ -176,11 +190,11 @@ void ServoMoteur(void * pvParameters)
 		{
 			vTraitementLigne(&ADCResult1);
 
-			for(compteur=0; compteur<128; compteur++)
+		/*	for(compteur=0; compteur<128; compteur++)
 			{
 				resultat=ADCResult1[compteur]+resultat;
 			}
-			resultat=0;
+			resultat=0;*/
 		}
 	}
 }

@@ -1,74 +1,92 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <history>
-   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -mthumb -Wall -ffunction-sections -g -O0 -c -DSTM32F407VG -DSTM32F4XX -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -DHSE_VALUE = 8000000 -D__FPU_USED -I..\..\..\workspace\freeRTOS_freescale\freeRTOS\Source\portable\GCC -I..\..\..\workspace\freeRTOS_freescale\freeRTOS\Source\portable\GCC\ARM_CM4F -I..\..\..\workspace\freeRTOS_freescale\freeRTOS -I..\..\..\workspace\freeRTOS_freescale\freeRTOS\Source\portable -I..\..\..\workspace\freeRTOS_freescale\cmsis_lib -I..\..\..\workspace\freeRTOS_freescale\cmsis -I..\..\..\workspace -I..\..\..\workspace\freeRTOS_freescale\cmsis_boot -I..\..\..\workspace\freeRTOS_freescale\freeRTOS\Source -I..\..\..\workspace\freeRTOS_freescale -I..\..\..\workspace\freeRTOS_freescale\cmsis_lib\include -I..\..\..\workspace\freeRTOS_freescale\freeRTOS\Source\include -I..\..\..">
-      <target file="servo.o" lastModified="14b2a84aaf5">
-         <source file="..\..\..\servo.c" lastModified="14b082f6218"/>
+   <processor signature="arm-none-eabi-gcc 4.8.1 mingw32 -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wall -ffunction-sections -g -O0 -c -DSTM32F407VG -DSTM32F4XX -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -DHSE_VALUE = 8000000 -D__FPU_USED -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale\freeRTOS\Source -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale\project_code -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale\freeRTOS -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale\freeRTOS\Source\portable\GCC -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale\cmsis -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale\cmsis_lib\include -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale\project_code\include -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale\freeRTOS\Source\portable -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale\freeRTOS\Source\include -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale\freeRTOS\Source\portable\GCC\ARM_CM4F -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale\cmsis_boot -I..\..\..\..\..\..\..\Desktop\freeRTOS_freescale\cmsis_lib -I..\..\..\..\..\..\..\Desktop">
+      <target file="servo.o" lastModified="14b61ae4e8b">
+         <source file="..\..\..\project_code\source\servo.c" lastModified="14b5e03f09b"/>
       </target>
-      <target file="stm32f4xx_exti.o" lastModified="14b2a84b42c">
+      <target file="stm32f4xx_exti.o" lastModified="14b61ae5485">
          <source file="..\..\..\cmsis_lib\source\stm32f4xx_exti.c" lastModified="14ab5c1df2b"/>
       </target>
-      <target file="stm32f4xx_gpio.o" lastModified="14b2a84ac0e">
+      <target file="stm32f4xx_gpio.o" lastModified="14b61ae4f09">
          <source file="..\..\..\cmsis_lib\source\stm32f4xx_gpio.c" lastModified="14a2a4108ad"/>
       </target>
-      <target file="tasks.o" lastModified="14b2a84aa0a">
+      <target file="tasks.o" lastModified="14b61ae4e0e">
          <source file="..\..\Source\tasks.c" lastModified="14a2a427ae0"/>
       </target>
-      <target file="stm32f4xx_syscfg.o" lastModified="14b2a849d39">
+      <target file="PID.o" lastModified="14b61ae51e2">
+         <source file="..\..\..\project_code\source\PID.c" lastModified="14b5f9b877b"/>
+      </target>
+      <target file="stm32f4xx_syscfg.o" lastModified="14b61ae45f9">
          <source file="..\..\..\cmsis_lib\source\stm32f4xx_syscfg.c" lastModified="14ab5c327a5"/>
       </target>
-      <target file="startup_stm32f4xx.o" lastModified="14b2a84a008">
+      <target file="startup_stm32f4xx.o" lastModified="14b61ae473d">
          <source file="..\..\..\cmsis_boot\startup\startup_stm32f4xx.c" lastModified="14a2a4ef9df"/>
       </target>
-      <target file="croutine.o" lastModified="14b2a84b342">
+      <target file="croutine.o" lastModified="14b61ae5385">
          <source file="..\..\Source\croutine.c" lastModified="14a2a427ac1"/>
       </target>
-      <target file="stm32f4xx_tim.o" lastModified="14b2a84b739">
+      <target file="stm32f4xx_tim.o" lastModified="14b61ae570f">
          <source file="..\..\..\cmsis_lib\source\stm32f4xx_tim.c" lastModified="14ab5c2605b"/>
       </target>
-      <target file="stm32f4xx_adc.o" lastModified="14b2a84a7c8">
+      <target file="stm32f4xx_adc.o" lastModified="14b61ae4d2a">
          <source file="..\..\..\cmsis_lib\source\stm32f4xx_adc.c" lastModified="14ab5c29575"/>
       </target>
-      <target file="system_stm32f4xx.o" lastModified="14b2a84adf2">
+      <target file="Accelerometre.o" lastModified="14b61b0bb1b">
+         <source file="..\..\..\project_code\source\Accelerometre.c" lastModified="14b5ee872b8"/>
+      </target>
+      <target file="system_stm32f4xx.o" lastModified="14b61ae5002">
          <source file="..\..\..\cmsis_boot\system_stm32f4xx.c" lastModified="14a2a45dcaa"/>
       </target>
-      <target file="led.o" lastModified="14b30bcc350">
-         <source file="..\..\..\led.c" lastModified="14b30bcbc6a"/>
+      <target file="led.o" lastModified="14b61ae46f9">
+         <source file="..\..\..\project_code\source\led.c" lastModified="14b56ca0e05"/>
       </target>
-      <target file="camera.o" lastModified="14b2f812ddc">
-         <source file="..\..\..\camera.c" lastModified="14b2f811b4e"/>
+      <target file="camera.o" lastModified="14b61ae4683">
+         <source file="..\..\..\project_code\source\camera.c" lastModified="14b5f9a8716"/>
       </target>
-      <target file="misc.o" lastModified="14b2a84b507">
+      <target file="misc.o" lastModified="14b61ae54f6">
          <source file="..\..\..\cmsis_lib\source\misc.c" lastModified="14ab5c2dca0"/>
       </target>
-      <target file="interruption.o" lastModified="14b2a84a547">
-         <source file="..\..\..\interruption.c" lastModified="14ae235da8d"/>
+      <target file="stm32f4xx_dma.o" lastModified="14b61ae50ed">
+         <source file="..\..\..\cmsis_lib\source\stm32f4xx_dma.c" lastModified="14b56d9c192"/>
       </target>
-      <target file="queue.o" lastModified="14b2a84b228">
+      <target file="interruption.o" lastModified="14b61ae4c20">
+         <source file="..\..\..\project_code\source\interruption.c" lastModified="14b56cd4098"/>
+      </target>
+      <target file="stm32f4xx_spi.o" lastModified="14b61ae5411">
+         <source file="..\..\..\cmsis_lib\source\stm32f4xx_spi.c" lastModified="14b56c14160"/>
+      </target>
+      <target file="queue.o" lastModified="14b61ae5302">
          <source file="..\..\Source\queue.c" lastModified="14a2a427ae0"/>
       </target>
-      <target file="stm32f4xx_rcc.o" lastModified="14b2a84a45d">
-         <source file="..\..\..\cmsis_lib\source\stm32f4xx_rcc.c" lastModified="14a2a4c0d02"/>
-      </target>
-      <target file="list.o" lastModified="14b2a84ad08">
+      <target file="list.o" lastModified="14b61ae4f8f">
          <source file="..\..\Source\list.c" lastModified="14a2a427ae0"/>
       </target>
-      <target file="Propultion.o" lastModified="14b30c95eb6">
-         <source file="..\..\..\Propultion.c" lastModified="14b30c95119"/>
+      <target file="stm32f4xx_rcc.o" lastModified="14b61ae4aec">
+         <source file="..\..\..\cmsis_lib\source\stm32f4xx_rcc.c" lastModified="14a2a4c0d02"/>
       </target>
-      <target file="port.o" lastModified="14b2a84b0c1">
+      <target file="Propultion.o" lastModified="14b61ae486d">
+         <source file="..\..\..\project_code\source\Propultion.c" lastModified="14b5f2f1cfb"/>
+      </target>
+      <target file="port.o" lastModified="14b61ae525c">
          <source file="..\..\Source\portable\GCC\ARM_CM4F\port.c" lastModified="14a2a427ae0"/>
       </target>
-      <target file="timers.o" lastModified="14b2a84a641">
+      <target file="timers.o" lastModified="14b61ae4c93">
          <source file="..\..\Source\timers.c" lastModified="14a2a427ae0"/>
       </target>
-      <target file="syscalls.o" lastModified="14b2a84aebd">
+      <target file="syscalls.o" lastModified="14b61ae5068">
          <source file="..\..\..\syscalls\syscalls.c" lastModified="14a2a40dcbb"/>
       </target>
-      <target file="adc.o" lastModified="14b2a84afc7">
-         <source file="..\..\..\adc.c" lastModified="14af1c63725"/>
+      <target file="stm32f4_discovery_lis302dl.o" lastModified="14b61ae5635">
+         <source file="..\..\..\project_code\source\stm32f4_discovery_lis302dl.c" lastModified="14b56f00189"/>
       </target>
-      <target file="main.o" lastModified="14b30df3c9c">
-         <source file="..\..\..\main.c" lastModified="14b30df3549"/>
+      <target file="adc.o" lastModified="14b61ae516c">
+         <source file="..\..\..\project_code\source\adc.c" lastModified="14b56c7ef06"/>
+      </target>
+      <target file="Additional_Features.o" lastModified="14b61b0b935">
+         <source file="..\..\..\project_code\source\Additional_Features.c" lastModified="14b3284d4c5"/>
+      </target>
+      <target file="main.o" lastModified="14b61b01df4">
+         <source file="..\..\..\project_code\source\main.c" lastModified="14b5f620d70"/>
       </target>
    </processor>
 </history>

@@ -1,17 +1,4 @@
-
-#include <stm32f4xx_gpio.h>
-#include <stm32f4xx_rcc.h>
-#include <stm32f4xx_exti.h>
-#include <stm32f4xx_tim.h>
-#include <stm32f4xx_adc.h>
-#include <stm32f4xx_syscfg.h>
-#include <stm32f4xx.h>
-#include <misc.h>
-
-#include <FreeRTOS.h>
-#include <task.h>
-#include <semphr.h>
-#include <queue.h>
+#include "led.h"
 
 void DiodeDeTest()
 {
@@ -69,7 +56,7 @@ void vLedCamera_Timer2_CH4_PB11()
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OCInitStructure.TIM_Pulse = 500;
+	TIM_OCInitStructure.TIM_Pulse =500;
 
 	//changer le numéro de TIM_OCxInite pour le chanel que tu veux
 	TIM_OC4Init(TIM2, &TIM_OCInitStructure);							//CHANGE

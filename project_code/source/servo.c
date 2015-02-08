@@ -1,17 +1,4 @@
-#include <stm32f4xx_gpio.h>
-#include <stm32f4xx_rcc.h>
-#include <stm32f4xx_exti.h>
-#include <stm32f4xx_tim.h>
-#include <stm32f4xx_adc.h>
-#include <stm32f4xx_syscfg.h>
-#include <stm32f4xx.h>
-
-#include "interruption.h"
-#include "camera.h"
-#include "adc.h"
 #include "servo.h"
-
-
 
 void servo_moteur(unsigned char delta)
 {
@@ -26,7 +13,7 @@ void servo_moteur(unsigned char delta)
 	TIM_OC1Init(TIM11, &TIM_OCInitStructure);							//CHANGE
 }
 
-vServo_Timer11_CH1_PB9()
+void vServo_Timer11_CH1_PB9()
 {
 	// Configure PC6-PC9 pins as AF, Pull-Down
 	GPIO_InitTypeDef        GPIO_InitStructure;
@@ -63,7 +50,7 @@ vServo_Timer11_CH1_PB9()
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OCInitStructure.TIM_Pulse = 150;
+	TIM_OCInitStructure.TIM_Pulse = REGLAGE_VITESSE_ROTATION_SERVOMOTEUR;
 
 	//changer le numéro de TIM_OCxInite pour le chanel que tu veux
 	TIM_OC1Init(TIM11, &TIM_OCInitStructure);							//CHANGE

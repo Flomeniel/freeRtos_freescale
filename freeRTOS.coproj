@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Project version="2G - 1.7.5" name="freeRTOS_freescale">
+<Project version="2G - 2.0.1" name="freeRTOS_freescale">
   <Target name="freeRTOS" isCurrent="1">
-    <Device manufacturerId="9" manufacturerName="ST" chipId="344" chipName="STM32F407VG" boardId="" boardName=""/>
+    <Device manufacturerId="9" manufacturerName="ST" chipId="261" chipName="STM32F407VG" boardId="" boardName="" coreId="" coreName=""/>
     <BuildOption>
       <Compile>
         <Option name="OptimizationLevel" value="0"/>
         <Option name="UseFPU" value="0"/>
         <Option name="UserEditCompiler" value=""/>
-        <Option name="FPU" value="1"/>
+        <Option name="FPU" value="2"/>
         <Includepaths>
           <Includepath path="."/>
         </Includepaths>
@@ -34,7 +34,7 @@
           <Memory name="IROM2" type="ReadOnly" size="" startValue=""/>
           <Memory name="IRAM2" type="ReadWrite" size="0x00010000" startValue="0x10000000"/>
         </MemoryAreas>
-        <LocateLinkFile path="../../configuration/programdata/freertos_freescale/arm-gcc-link.ld" type="0"/>
+        <LocateLinkFile path="../../appdata/roaming/coocox/coide/configuration/programdata/freertos_freescale/arm-gcc-link.ld" type="0"/>
       </Link>
       <Output>
         <Option name="OutputFileType" value="0"/>
@@ -50,7 +50,7 @@
     </BuildOption>
     <DebugOption>
       <Option name="org.coocox.codebugger.gdbjtag.core.adapter" value="ST-Link"/>
-      <Option name="org.coocox.codebugger.gdbjtag.core.debugMode" value="JTAG"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.debugMode" value="SWD"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.clockDiv" value="1M"/>
       <Option name="org.coocox.codebugger.gdbjtag.corerunToMain" value="1"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.jlinkgdbserver" value=""/>
@@ -65,93 +65,99 @@
       <Option name="org.coocox.codebugger.gdbjtag.core.autoDownload" value="1"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.verify" value="1"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.downloadFuction" value="Erase Effected"/>
-      <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="STM32F4xx_1024.elf"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="C:\Users\clement\AppData\Roaming\CooCox\CoIDE\config\flash\CooCox-Flash\CoIDE_STM32F4xx_1024K\STM32F4xx_1024.elf"/>
     </DebugOption>
     <ExcludeFile/>
   </Target>
-  <Components path="./">
-    <Component id="30" name="C Library" path="" type="2"/>
-    <Component id="54" name="M4 CMSIS Core" path="" type="2"/>
-    <Component id="500" name="CMSIS BOOT" path="" type="2"/>
-    <Component id="501" name="RCC" path="" type="2"/>
-    <Component id="504" name="GPIO" path="" type="2"/>
-    <Component id="505" name="EXTI" path="" type="2"/>
-    <Component id="513" name="TIM" path="" type="2"/>
-    <Component id="514" name="ADC" path="" type="2"/>
-    <Component id="524" name="MISC" path="" type="2"/>
-    <Component id="526" name="SYSCFG" path="" type="2"/>
-    <Component id="720" name="FreeRTOS" path="" type="2"/>
-  </Components>
+  <Components path="./"/>
+  <LocalComponents/>
   <Files>
     <File name="cmsis_lib/source/stm32f4xx_gpio.c" path="cmsis_lib/source/stm32f4xx_gpio.c" type="1"/>
+    <File name="Project_code/include/adc.h" path="project_code/include/adc.h" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_dma.c" path="cmsis_lib/source/stm32f4xx_dma.c" type="1"/>
     <File name="FreeRTOS/Source/queue.c" path="freeRTOS/Source/queue.c" type="1"/>
     <File name="FreeRTOS/Source/tasks.c" path="freeRTOS/Source/tasks.c" type="1"/>
     <File name="FreeRTOS/Source/include/croutine.h" path="freeRTOS/Source/include/croutine.h" type="1"/>
     <File name="cmsis_boot" path="" type="2"/>
+    <File name="Project_code/include/led.h" path="project_code/include/led.h" type="1"/>
     <File name="FreeRTOS/Source/include/mpu_wrappers.h" path="freeRTOS/Source/include/mpu_wrappers.h" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_syscfg.h" path="cmsis_lib/include/stm32f4xx_syscfg.h" type="1"/>
+    <File name="Project_code/include/servo.h" path="project_code/include/servo.h" type="1"/>
+    <File name="Project_code/include/interruption.h" path="project_code/include/interruption.h" type="1"/>
     <File name="FreeRTOS/Source/include/timers.h" path="freeRTOS/Source/include/timers.h" type="1"/>
-    <File name="led.h" path="led.h" type="1"/>
+    <File name="cmsis_boot/startup" path="" type="2"/>
     <File name="cmsis/core_cm4_simd.h" path="cmsis/core_cm4_simd.h" type="1"/>
     <File name="cmsis_boot/stm32f4xx.h" path="cmsis_boot/stm32f4xx.h" type="1"/>
-    <File name="cmsis_boot/startup" path="" type="2"/>
+    <File name="cmsis_lib/source/stm32f4xx_spi.c" path="cmsis_lib/source/stm32f4xx_spi.c" type="1"/>
     <File name="cmsis/core_cmFunc.h" path="cmsis/core_cmFunc.h" type="1"/>
     <File name="cmsis/core_cm4.h" path="cmsis/core_cm4.h" type="1"/>
-    <File name="servo.c" path="servo.c" type="1"/>
+    <File name="Project_code" path="" type="2"/>
+    <File name="Project_code/include" path="" type="2"/>
     <File name="cmsis_lib/source/misc.c" path="cmsis_lib/source/misc.c" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_tim.h" path="cmsis_lib/include/stm32f4xx_tim.h" type="1"/>
     <File name="FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h" path="freeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_adc.c" path="cmsis_lib/source/stm32f4xx_adc.c" type="1"/>
-    <File name="cmsis_lib/include/stm32f4xx_tim.h" path="cmsis_lib/include/stm32f4xx_tim.h" type="1"/>
     <File name="syscalls/syscalls.c" path="syscalls/syscalls.c" type="1"/>
     <File name="FreeRTOS/Source/include/portable.h" path="freeRTOS/Source/include/portable.h" type="1"/>
     <File name="FreeRTOS/Source/portable/GCC/ARM_CM4F" path="" type="2"/>
     <File name="cmsis_lib/source" path="" type="2"/>
+    <File name="Project_code/source/interruption.c" path="project_code/source/interruption.c" type="1"/>
     <File name="FreeRTOS/Source/portable/GCC" path="" type="2"/>
     <File name="FreeRTOS/Source/portable" path="" type="2"/>
     <File name="FreeRTOS/Source/croutine.c" path="freeRTOS/Source/croutine.c" type="1"/>
+    <File name="Project_code/include/camera.h" path="project_code/include/camera.h" type="1"/>
+    <File name="Project_code/source/adc.c" path="project_code/source/adc.c" type="1"/>
+    <File name="Project_code/source/main.c" path="project_code/source/main.c" type="1"/>
+    <File name="Project_code/include/Additional_Features.h" path="project_code/include/Additional_Features.h" type="1"/>
     <File name="FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c" path="freeRTOS/Source/portable/GCC/ARM_CM4F/port.c" type="1"/>
+    <File name="Project_code/source/stm32f4_discovery_lis302dl.c" path="project_code/source/stm32f4_discovery_lis302dl.c" type="1"/>
     <File name="cmsis_boot/stm32f4xx_conf.h" path="cmsis_boot/stm32f4xx_conf.h" type="1"/>
     <File name="cmsis_boot/system_stm32f4xx.h" path="cmsis_boot/system_stm32f4xx.h" type="1"/>
     <File name="FreeRTOS/Source/list.c" path="freeRTOS/Source/list.c" type="1"/>
-    <File name="interruption.h" path="interruption.h" type="1"/>
     <File name="FreeRTOS/Source/timers.c" path="freeRTOS/Source/timers.c" type="1"/>
-    <File name="camera.h" path="camera.h" type="1"/>
-    <File name="FreeRTOS/Source" path="" type="2"/>
-    <File name="FreeRTOS/Source/include" path="" type="2"/>
     <File name="cmsis_lib/include/stm32f4xx_rcc.h" path="cmsis_lib/include/stm32f4xx_rcc.h" type="1"/>
+    <File name="FreeRTOS/Source/include" path="" type="2"/>
+    <File name="FreeRTOS/Source" path="" type="2"/>
+    <File name="Project_code/source/PID.c" path="project_code/source/PID.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_syscfg.c" path="cmsis_lib/source/stm32f4xx_syscfg.c" type="1"/>
+    <File name="Project_code/source/led.c" path="project_code/source/led.c" type="1"/>
     <File name="FreeRTOS/Source/include/task.h" path="freeRTOS/Source/include/task.h" type="1"/>
-    <File name="adc.h" path="adc.h" type="1"/>
     <File name="cmsis_boot/startup/startup_stm32f4xx.c" path="cmsis_boot/startup/startup_stm32f4xx.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_rcc.c" path="cmsis_lib/source/stm32f4xx_rcc.c" type="1"/>
-    <File name="servo.h" path="servo.h" type="1"/>
     <File name="cmsis/core_cmInstr.h" path="cmsis/core_cmInstr.h" type="1"/>
+    <File name="Project_code/source" path="" type="2"/>
+    <File name="Project_code/source/Additional_Features.c" path="project_code/source/Additional_Features.c" type="1"/>
+    <File name="Project_code/include/PID.h" path="project_code/include/PID.h" type="1"/>
+    <File name="Project_code/include/Project_Conf.h" path="project_code/include/Project_Conf.h" type="1"/>
     <File name="FreeRTOS/Source/include/queue.h" path="freeRTOS/Source/include/queue.h" type="1"/>
+    <File name="Project_code/source/Accelerometre.c" path="project_code/source/Accelerometre.c" type="1"/>
     <File name="FreeRTOS/Source/include/semphr.h" path="freeRTOS/Source/include/semphr.h" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_adc.h" path="cmsis_lib/include/stm32f4xx_adc.h" type="1"/>
+    <File name="Project_code/include/Accelerometre.h" path="project_code/include/Accelerometre.h" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_exti.h" path="cmsis_lib/include/stm32f4xx_exti.h" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_exti.c" path="cmsis_lib/source/stm32f4xx_exti.c" type="1"/>
     <File name="FreeRTOS/Source/include/list.h" path="freeRTOS/Source/include/list.h" type="1"/>
     <File name="cmsis_boot/system_stm32f4xx.c" path="cmsis_boot/system_stm32f4xx.c" type="1"/>
-    <File name="Propultion.c" path="Propultion.c" type="1"/>
-    <File name="interruption.c" path="interruption.c" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_spi.h" path="cmsis_lib/include/stm32f4xx_spi.h" type="1"/>
+    <File name="Project_code/source/servo.c" path="project_code/source/servo.c" type="1"/>
+    <File name="Project_code/source/camera.c" path="project_code/source/camera.c" type="1"/>
     <File name="cmsis" path="" type="2"/>
     <File name="cmsis_lib" path="" type="2"/>
+    <File name="cmsis_lib/include/stm32f4xx_dma.h" path="cmsis_lib/include/stm32f4xx_dma.h" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_tim.c" path="cmsis_lib/source/stm32f4xx_tim.c" type="1"/>
-    <File name="adc.c" path="adc.c" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_gpio.h" path="cmsis_lib/include/stm32f4xx_gpio.h" type="1"/>
     <File name="FreeRTOS/Source/include/FreeRTOS.h" path="freeRTOS/Source/include/FreeRTOS.h" type="1"/>
-    <File name="led.c" path="led.c" type="1"/>
-    <File name="camera.c" path="camera.c" type="1"/>
     <File name="syscalls" path="" type="2"/>
     <File name="FreeRTOS/Source/include/StackMacros.h" path="freeRTOS/Source/include/StackMacros.h" type="1"/>
     <File name="FreeRTOS/Source/include/FreeRTOSConfig.h" path="freeRTOS/Source/include/FreeRTOSConfig.h" type="1"/>
     <File name="cmsis_lib/include/misc.h" path="cmsis_lib/include/misc.h" type="1"/>
-    <File name="Propultion.h" path="Propultion.h" type="1"/>
+    <File name="Project_code/include/Propultion.h" path="project_code/include/Propultion.h" type="1"/>
+    <File name="Project_code/include/stm32f4_discovery_lis302dl.h" path="project_code/include/stm32f4_discovery_lis302dl.h" type="1"/>
+    <File name="Project_code/source/Propultion.c" path="project_code/source/Propultion.c" type="1"/>
     <File name="cmsis_lib/include" path="" type="2"/>
     <File name="FreeRTOS/Source/include/ustime.h" path="freeRTOS/Source/include/ustime.h" type="1"/>
     <File name="FreeRTOS" path="" type="2"/>
     <File name="FreeRTOS/Source/include/projdefs.h" path="freeRTOS/Source/include/projdefs.h" type="1"/>
-    <File name="main.c" path="main.c" type="1"/>
   </Files>
+  <Bookmarks/>
 </Project>
